@@ -6,7 +6,6 @@ export default async function CreateExpenditure(req, res) {
         if (!baseId || !equipmentId || !quantity || quantity <= 0) {
             return res.status(400).json({ success: false, message: "Invalid expenditure data" });
         }
-        // RBAC: ADMIN and BASE_COMMANDER and LOGISTICS can record expenditure (Base Commander limited to own base)
         if (req.role !== "ADMIN" && req.role !== "BASE_COMMANDER" && req.role !== "LOGISTICS_PERSONNEL") {
             return res.status(403).json({ success: false, message: "Unauthorized to record expenditures" });
         }
@@ -34,7 +33,7 @@ export default async function CreateExpenditure(req, res) {
             where: { id: stock.id },
             data: { currentQuantity: stock.currentQuantity - quantity },
         });
-        // create transaction
+        // createng transaction afyer expenditure ..
         await prisma.transaction.create({
             data: {
                 txType: "EXPENDITURE",
@@ -46,7 +45,7 @@ export default async function CreateExpenditure(req, res) {
                 performedBy: req.userId,
             },
         });
-        // audit log
+        // audit loging..
         await createAuditLog({
             actorId: req.userId,
             action: "CREATE_EXPENDITURE",

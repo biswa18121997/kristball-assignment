@@ -1,7 +1,7 @@
 import prisma from "../utils/prisma.js";
 export async function createAuditLog({ actorId, action, entity, entityId, payload = {}, }) {
     try {
-        await prisma.auditLog.create({
+        const log = await prisma.auditLog.create({
             data: {
                 actorId,
                 action,
@@ -10,6 +10,8 @@ export async function createAuditLog({ actorId, action, entity, entityId, payloa
                 payload,
             },
         });
+        console.info("Audit log created:", JSON.stringify(log));
+        return log;
     }
     catch (error) {
         console.error("Audit log failed:", error);

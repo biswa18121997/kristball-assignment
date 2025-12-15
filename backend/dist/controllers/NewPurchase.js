@@ -2,7 +2,7 @@ import prisma from "../utils/prisma.js";
 import { createAuditLog } from "../utils/createAuditLog.js";
 export default async function NewPurchase(req, res) {
     try {
-        // Logistics personnel & Admin CAN create purchases
+        // Logistics personnel & Admin CAN create  onlyy
         if (req.role !== "LOGISTICS_PERSONNEL" && req.role !== "ADMIN") {
             return res.status(403).json({
                 success: false,
@@ -16,7 +16,6 @@ export default async function NewPurchase(req, res) {
                 message: "Invalid purchase data",
             });
         }
-        // ✅ Create purchase with nested items
         const purchase = await prisma.purchase.create({
             data: {
                 baseId,
@@ -32,7 +31,6 @@ export default async function NewPurchase(req, res) {
                 items: true,
             },
         });
-        // For each purchased item, update base stock and create a transaction record
         for (const item of purchase.items) {
             const stock = await prisma.baseStock.findUnique({
                 where: { baseId_equipmentId: { baseId, equipmentId: item.equipmentId } },
@@ -65,7 +63,6 @@ export default async function NewPurchase(req, res) {
                 },
             });
         }
-        // ✅ AUDIT LOG
         await createAuditLog({
             actorId: req.userId,
             action: "CREATE_PURCHASE",

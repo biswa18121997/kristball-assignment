@@ -1,1 +1,1 @@
-{"version":3,"file":"CreateExpenditure.d.ts","sourceRoot":"","sources":["../../src/controllers/CreateExpenditure.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,OAAO,EAAE,QAAQ,EAAE,MAAM,SAAS,CAAC;AAIjD,wBAA8B,iBAAiB,CAAC,GAAG,EAAE,OAAO,EAAE,GAAG,EAAE,QAAQ,+CAqE1E"}
+{"version":3,"file":"CreateExpenditure.d.ts","sourceRoot":"","sources":["../../src/controllers/CreateExpenditure.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,OAAO,EAAE,QAAQ,EAAE,MAAM,SAAS,CAAC;AAIjD,wBAA8B,iBAAiB,CAAC,GAAG,EAAE,OAAO,EAAE,GAAG,EAAE,QAAQ,+CAkE1E"}

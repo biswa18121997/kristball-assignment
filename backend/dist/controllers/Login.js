@@ -8,7 +8,7 @@ export default async function Login(req, res) {
             include: { base: true }
         });
         if (userData) {
-            // simple password check (DB seeded with plain password for demo)
+            // simple password check (DB seeded with plain password for demo)--no hashing tools or libabyt has been used so thet checking of assignment is easier
             // @ts-ignore
             if (userData.hashedPassword !== req.password) {
                 return res.status(401).json({

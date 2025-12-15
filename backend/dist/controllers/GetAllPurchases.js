@@ -9,7 +9,6 @@ export default async function GetAllPurchases(req, res) {
                 message: "Unauthorized to view purchases",
             });
         }
-        // Build where clause safely
         const where = role === "ADMIN"
             ? undefined
             : baseId
@@ -36,7 +35,6 @@ export default async function GetAllPurchases(req, res) {
                 date: "desc",
             },
         });
-        // Ensure actorId exists before audit log
         if (userId) {
             await createAuditLog({
                 actorId: userId,

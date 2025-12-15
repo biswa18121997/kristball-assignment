@@ -3,7 +3,6 @@ import { createAuditLog } from "../utils/createAuditLog.js";
 export default async function GetExpenditures(req, res) {
     try {
         let expenditures;
-        // 🔐 ROLE-BASED ACCESS
         if (req.role === "ADMIN") {
             expenditures = await prisma.expenditure.findMany({
                 include: {

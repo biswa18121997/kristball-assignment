@@ -1,7 +1,10 @@
 import type { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
-import type { Role } from "@prisma/client";
+
+// Prisma enums might not be exported as runtime types in the generated client;
+// declare a local Role type for JWT payload validation.
+type Role = "ADMIN" | "BASE_COMMANDER" | "LOGISTICS_PERSONNEL";
 
 interface AppJwtPayload {
   id: string;

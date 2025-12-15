@@ -1,7 +1,6 @@
 import prisma from "../utils/prisma.js";
 import type { Request, Response } from "express";
 import { createAuditLog } from "../utils/createAuditLog.js";
-import { Role } from "@prisma/client";
 
 export default async function UpdateTrackingStatus(req: Request, res: Response) {
   try {

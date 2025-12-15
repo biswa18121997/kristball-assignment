@@ -1,6 +1,5 @@
 import prisma from "../utils/prisma.js";
 import { createAuditLog } from "../utils/createAuditLog.js";
-import { Role } from "@prisma/client";
 export default async function UpdateTrackingStatus(req, res) {
     try {
         const { transferId, newStatus, oldStatus } = req.body;
@@ -19,7 +18,7 @@ export default async function UpdateTrackingStatus(req, res) {
                 success: false,
             });
         }
-        // only logistics personnel or admin can update other bases; base commander limited to own base
+        // only logistics personnel or admin can update other bases; base commander limited to own base..
         // @ts-ignore
         if (transfer.fromBase.id !== req.baseId && req.role !== "LOGISTICS_PERSONNEL" && req.role !== "ADMIN") {
             return res.status(403).json({
@@ -31,7 +30,6 @@ export default async function UpdateTrackingStatus(req, res) {
             where: { id: transferId },
             data: { status: newStatus },
         });
-        // If transfer completed, credit receiving base and create TRANSFER_IN transactions
         if (newStatus === "COMPLETED") {
             for (const item of transfer.items) {
                 const toStock = await prisma.baseStock.findUnique({
@@ -66,7 +64,6 @@ export default async function UpdateTrackingStatus(req, res) {
                 });
             }
         }
-        // ✅ AUDIT LOG (THIS IS THE PART YOU ASKED ABOUT)
         await createAuditLog({
             actorId: req.userId,
             action: "UPDATE_TRANSFER_STATUS",

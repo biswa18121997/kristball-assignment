@@ -13,7 +13,7 @@ export default async function GetAllTransfers(req, res) {
         }
         let whereClause = {};
         if (role !== "ADMIN") {
-            // Non-admins see transfers involving their base
+            // nonn-admins see transfers of their base only..
             whereClause = {
                 OR: [
                     { fromBaseId: baseId }, // trander outt
@@ -43,7 +43,6 @@ export default async function GetAllTransfers(req, res) {
                 date: "desc",
             },
         });
-        // 🧾 Audit log
         await createAuditLog({
             actorId: userId,
             action: "VIEW_TRANSFERS",

@@ -2,15 +2,13 @@ import prisma from '../utils/prisma.js';
 export default async function AssignAssetToPersonnel(req, res) {
     try {
         let { equipmentId, baseId, userId, quantity } = req.body;
-        // RBAC: only ADMIN, BASE_COMMANDER, LOGISTICS_PERSONNEL can assign
         if (req.role !== 'ADMIN' && req.role !== 'BASE_COMMANDER' && req.role !== 'LOGISTICS_PERSONNEL') {
             return res.status(403).json({ success: false, message: 'Unauthorized to assign assets' });
         }
-        // Base Commander can only assign from own base
         if (req.role === 'BASE_COMMANDER' && req.baseId !== baseId) {
             return res.status(403).json({ success: false, message: 'Base Commander can only assign assets from their own base' });
         }
-        // Check stock availability
+        //check stockss..
         const stock = await prisma.baseStock.findUnique({
             where: { baseId_equipmentId: { baseId, equipmentId } },
         });
@@ -32,7 +30,7 @@ export default async function AssignAssetToPersonnel(req, res) {
                 createdBy: req.userId
             }
         });
-        // audit log
+        // audit loggingg
         await prisma.auditLog.create({
             data: {
                 actorId: req.userId,

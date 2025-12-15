@@ -1,1 +1,1 @@
-{"version":3,"file":"DashboardData.d.ts","sourceRoot":"","sources":["../../src/controllers/DashboardData.ts"],"names":[],"mappings":"AACA,OAAO,KAAK,EAAE,OAAO,EAAE,QAAQ,EAAE,MAAM,SAAS,CAAC;AAGjD,wBAA8B,aAAa,CAAC,GAAG,EAAE,OAAO,EAAE,GAAG,EAAE,QAAQ,+CAkItE"}
+{"version":3,"file":"DashboardData.d.ts","sourceRoot":"","sources":["../../src/controllers/DashboardData.ts"],"names":[],"mappings":"AACA,OAAO,KAAK,EAAE,OAAO,EAAE,QAAQ,EAAE,MAAM,SAAS,CAAC;AAGjD,wBAA8B,aAAa,CAAC,GAAG,EAAE,OAAO,EAAE,GAAG,EAAE,QAAQ,+CA0HtE"}

@@ -6,8 +6,8 @@ import prisma from "./utils/prisma.js";
 const PORT = process.env.PORT || 8086;
 const app = express();
 const allowedOrigins = [
-    "http://localhost:5173",
-    "http://localhost:5555"
+    "http://localhost:5173", //ye wala frontend
+    "http://localhost:5555" // ye wala prisma studion for seeing the database..
 ];
 app.use(cors({
     origin: allowedOrigins,
@@ -19,13 +19,13 @@ Routes(app);
 async function startServer() {
     try {
         await prisma.$connect();
-        console.log("✅ Database connected");
+        console.log("Database connected sucessfully..!");
         app.listen(PORT, () => {
-            console.log(`🚀 Server running on port ${PORT}`);
+            console.log(`Server running on port -->${PORT}`);
         });
     }
     catch (error) {
-        console.error("❌ Failed to connect to database", error);
+        console.error("Failed to connect..", error);
         process.exit(1);
     }
 }

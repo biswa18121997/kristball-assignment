@@ -42,13 +42,13 @@ export default async function TransferAsset(req, res) {
                 toBase: true,
             },
         });
-        // decrement stock for fromBase and create TRANSFER_OUT transactions
+        // decrement stock for fromBase and createng transfer out  transactions 
         for (const item of transfer.items) {
             const stock = await prisma.baseStock.findUnique({
                 where: { baseId_equipmentId: { baseId: fromBaseId, equipmentId: item.equipmentId } },
             });
             if (!stock || stock.currentQuantity < item.quantity) {
-                // rollback transfer if insufficient stock
+                // forst checking of th enumber of stock asked for is presentt ..if less then delete or rollback the last transaction 
                 await prisma.transfer.delete({ where: { id: transfer.id } });
                 return res.status(400).json({
                     success: false,

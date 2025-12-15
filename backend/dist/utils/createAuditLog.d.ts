@@ -5,6 +5,6 @@ interface AuditParams {
     entityId?: string;
     payload?: any;
 }
-export declare function createAuditLog({ actorId, action, entity, entityId, payload, }: AuditParams): Promise<void>;
+export declare function createAuditLog({ actorId, action, entity, entityId, payload, }: AuditParams): Promise<any>;
 export {};
 //# sourceMappingURL=createAuditLog.d.ts.map

@@ -1,13 +1,13 @@
 import prisma from "../utils/prisma.js";
-import { Role, TransactionType } from "@prisma/client";
+// Use string literals for runtime comparisons (Prisma enums may be types-only)
 export default async function DashboardData(req, res) {
     try {
         const { fromDate, toDate, baseId: queryBaseId, equipmentType, } = req.query;
         let baseFilter;
-        if (req.role === Role.ADMIN) {
+        if (req.role === "ADMIN") {
             baseFilter = queryBaseId; // admin may see all or specific base
         }
-        else if (req.role === Role.BASE_COMMANDER) {
+        else if (req.role === "BASE_COMMANDER") {
             baseFilter = req.baseId; // forced to own base
         }
         else {
@@ -49,10 +49,10 @@ export default async function DashboardData(req, res) {
                 }),
             },
         });
-        const purchases = transactions.filter((t) => t.txType === TransactionType.PURCHASE);
-        const transferIn = transactions.filter((t) => t.txType === TransactionType.TRANSFER_IN);
-        const transferOut = transactions.filter((t) => t.txType === TransactionType.TRANSFER_OUT);
-        const expenditureTx = transactions.filter((t) => t.txType === TransactionType.EXPENDITURE);
+        const purchases = transactions.filter((t) => t.txType === "PURCHASE");
+        const transferIn = transactions.filter((t) => t.txType === "TRANSFER_IN");
+        const transferOut = transactions.filter((t) => t.txType === "TRANSFER_OUT");
+        const expenditureTx = transactions.filter((t) => t.txType === "EXPENDITURE");
         const netMovement = purchases.reduce((s, t) => s + t.quantity, 0) +
             transferIn.reduce((s, t) => s + t.quantity, 0) -
             transferOut.reduce((s, t) => s + t.quantity, 0);
