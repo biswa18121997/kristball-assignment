@@ -4,7 +4,7 @@ import { UserContext } from "../state/UserContext";
 
 const ProtectedRoute = () => {
   const userCtx = useContext(UserContext);
-  const navigate = useNavigate('/login');
+  const navigate = useNavigate();
 
   // Not logged in
   if (!userCtx || !userCtx.token) {
