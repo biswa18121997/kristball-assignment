@@ -1,0 +1,1 @@
+{"version":3,"file":"TokenVerifier.d.ts","sourceRoot":"","sources":["../../src/middlewares/TokenVerifier.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,OAAO,EAAE,QAAQ,EAAE,YAAY,EAAE,MAAM,SAAS,CAAC;AAE/D,OAAO,eAAe,CAAC;AAUvB,MAAM,CAAC,OAAO,UAAU,aAAa,CACnC,GAAG,EAAE,OAAO,EACZ,GAAG,EAAE,QAAQ,EACb,IAAI,EAAE,YAAY,sCA6BnB"}

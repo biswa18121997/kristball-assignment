@@ -1,0 +1,227 @@
+// ============================
+// DATASOURCE & GENERATOR
+// ============================
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://postgres:9199@localhost:5432/military_asset_management_db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+//enumsss...for fixeddd valuess
+enum Role {
+  ADMIN
+  BASE_COMMANDER
+  LOGISTICS_PERSONNEL
+}
+
+enum EquipmentType {
+  VEHICLE
+  WEAPON
+  AMMUNITION
+  COMMUNICATION_EQUIPMENT
+  MEDICAL_SUPPLIES
+  OTHER
+}
+
+enum AssignmentStatus {
+  ACTIVE
+  RETURNED
+  USED
+}
+
+enum TransactionType {
+  PURCHASE
+  TRANSFER_IN
+  TRANSFER_OUT
+  EXPENDITURE
+}
+
+enum PurchaseStatus {
+  PENDING
+  RECEIVED
+  CANCELED
+}
+
+enum TransferStatus {
+  PENDING
+  APPROVED
+  COMPLETED
+  CANCELED
+}
+
+
+//models
+
+model Base {
+  id       String @id @default(uuid())
+  name     String
+  location String
+  baseCode String @unique
+
+  users        User[]
+  stock        BaseStock[]
+  purchases    Purchase[]
+  transferOut  Transfer[]    @relation("TransferOut")
+  transferIn   Transfer[]    @relation("TransferIn")
+  assignments  Assignment[]
+  expenditures Expenditure[]
+  transactions Transaction[]
+}
+
+model User {
+  id             String @id @default(uuid())
+  name           String
+  email          String @unique
+  hashedPassword String
+  role           Role
+  baseId String
+  base   Base   @relation(fields: [baseId], references: [id])
+  assignments        Assignment[] @relation("AssignmentUser")
+  createdAssignments Assignment[] @relation("AssignmentCreator")
+  createdPurchases Purchase[] @relation("PurchaseCreator")
+  createdTransfers Transfer[] @relation("TransferCreator")
+  expenditures Expenditure[]
+  performedTransactions Transaction[] @relation("UserPerformedTransactions")
+  auditLogs AuditLog[]
+  createdAt DateTime @default(now())
+}
+
+model Equipment {
+  id   String        @id @default(uuid())
+  name String
+  type EquipmentType
+  stock         BaseStock[]
+  purchaseItems PurchaseItem[]
+  transferItems TransferItem[]
+  assignments   Assignment[]
+  expenditures  Expenditure[]
+  transactions  Transaction[]
+}
+
+model BaseStock {
+  id              String @id @default(uuid())
+  baseId          String
+  equipmentId     String
+  openingQuantity Int
+  currentQuantity Int
+  base      Base      @relation(fields: [baseId], references: [id])
+  equipment Equipment @relation(fields: [equipmentId], references: [id])
+  @@unique([baseId, equipmentId])
+}
+
+model Purchase {
+  id        String         @id @default(uuid())
+  baseId    String
+  createdBy String
+  status    PurchaseStatus @default(PENDING)
+  date      DateTime       @default(now())
+  base          Base           @relation(fields: [baseId], references: [id])
+  createdByUser User?          @relation("PurchaseCreator", fields: [createdBy], references: [id])
+  items         PurchaseItem[]
+}
+
+model Transfer {
+  id         String         @id @default(uuid())
+  fromBaseId String
+  toBaseId   String
+  createdBy  String
+  status     TransferStatus @default(PENDING)
+  date       DateTime       @default(now())
+  fromBase      Base           @relation("TransferOut", fields: [fromBaseId], references: [id])
+  toBase        Base           @relation("TransferIn", fields: [toBaseId], references: [id])
+  createdByUser User?          @relation("TransferCreator", fields: [createdBy], references: [id])
+  items         TransferItem[]
+}
+
+model Assignment {
+  id           String           @id @default(uuid())
+  equipmentId  String
+  baseId       String
+  userId       String
+  quantity     Int
+  status       AssignmentStatus
+  dateAssigned DateTime         @default(now())
+  dateReturned DateTime?
+  createdBy    String
+  equipment Equipment @relation(fields: [equipmentId], references: [id])
+  base      Base      @relation(fields: [baseId], references: [id])
+  user      User      @relation("AssignmentUser", fields: [userId], references: [id])
+  creator   User      @relation("AssignmentCreator", fields: [createdBy], references: [id])
+
+  @@unique([equipmentId, userId, dateAssigned])
+}
+
+model Transaction {
+  id     String          @id @default(uuid())
+  txType TransactionType
+
+  baseId      String?
+  equipmentId String?
+  quantity    Int
+
+  sourceType String
+  sourceId   String
+
+  performedBy String?
+  createdAt   DateTime @default(now())
+
+  base      Base?      @relation(fields: [baseId], references: [id])
+  equipment Equipment? @relation(fields: [equipmentId], references: [id])
+  performer User?      @relation("UserPerformedTransactions", fields: [performedBy], references: [id])
+
+  @@index([sourceType, sourceId])
+}
+
+model Expenditure {
+  id          String   @id @default(uuid())
+  baseId      String
+  equipmentId String
+  quantity    Int
+  reason      String?
+  performedBy String
+  createdAt   DateTime @default(now())
+
+  base      Base      @relation(fields: [baseId], references: [id])
+  equipment Equipment @relation(fields: [equipmentId], references: [id])
+  performer User      @relation(fields: [performedBy], references: [id])
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  actorId   String?
+  action    String
+  entity    String?
+  entityId  String?
+  payload   Json
+  createdAt DateTime @default(now())
+
+  actor User? @relation(fields: [actorId], references: [id])
+}
+
+model PurchaseItem {
+  id          String @id @default(uuid())
+  purchaseId  String
+  equipmentId String
+  quantity    Int
+
+  purchase  Purchase  @relation(fields: [purchaseId], references: [id])
+  equipment Equipment @relation(fields: [equipmentId], references: [id])
+
+  @@unique([purchaseId, equipmentId])
+}
+
+model TransferItem {
+  id          String @id @default(uuid())
+  transferId  String
+  equipmentId String
+  quantity    Int
+
+  transfer  Transfer  @relation(fields: [transferId], references: [id])
+  equipment Equipment @relation(fields: [equipmentId], references: [id])
+
+  @@unique([transferId, equipmentId])
+}

@@ -1,0 +1,1 @@
+{"version":3,"file":"IsUserAllowed.d.ts","sourceRoot":"","sources":["../../src/middlewares/IsUserAllowed.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,OAAO,EAAE,QAAQ,EAAE,YAAY,EAAE,MAAM,SAAS,CAAC;AAE/D,MAAM,CAAC,OAAO,UAAU,aAAa,CACnC,GAAG,EAAE,OAAO,EACZ,GAAG,EAAE,QAAQ,EACb,IAAI,EAAE,YAAY,6CA4DnB"}
