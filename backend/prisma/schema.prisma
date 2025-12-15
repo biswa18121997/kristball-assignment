@@ -4,7 +4,8 @@
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://postgres:9199@localhost:5432/military_asset_management_db"
+  url      = "postgresql://kristball:YrUDpbfXaNBn5o75U4pHLyzTYkWIvasV@dpg-d4vr01npm1nc73bu5bu0-a.oregon-postgres.render.com/military_asset_management_db"
+//"postgresql://postgres:9199@localhost:5432/military_asset_management_db"
 }
 
 generator client {
